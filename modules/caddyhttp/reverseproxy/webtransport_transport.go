@@ -104,7 +104,7 @@ func (h *Handler) webTransportHijack(rw http.ResponseWriter, req *http.Request, 
 	wtServer, ok := server.WebTransportServer().(*webtransport.Server)
 	if !ok || wtServer == nil {
 		return terminalError{caddyhttp.Error(http.StatusInternalServerError,
-			errors.New("webtransport: server has enable_webtransport=false or HTTP/3 is not enabled"))}
+			errors.New("webtransport: server has webtransport disabled or HTTP/3 is not enabled"))}
 	}
 
 	// Reach the naked http3 response writer so Upgrade's type assertions
@@ -117,7 +117,7 @@ func (h *Handler) webTransportHijack(rw http.ResponseWriter, req *http.Request, 
 	}
 
 	// A WT CONNECT reached this handler because the parent server has
-	// enable_webtransport=true. But the handler's transport still has to
+	// webtransport enabled. But the handler's transport still has to
 	// speak HTTP/3 to dial the WT upstream.
 	wtt, ok := h.Transport.(webTransportTransport)
 	if !ok {
